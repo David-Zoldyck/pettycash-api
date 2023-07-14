@@ -6,7 +6,7 @@ const register = async (req, res) => {
   const { username, password, confirmPassword } = req.body;
 
   try {
-    //check if user
+    //check if user exists
     const alreadyExists = await User.findOne({ username });
 
     if (alreadyExists) {
