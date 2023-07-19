@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongooseAutoPopulate from "mongoose-autopopulate";
 
 const pettyCashRequestSchema = new mongoose.Schema(
   {
@@ -17,6 +18,12 @@ const pettyCashRequestSchema = new mongoose.Schema(
     ],
     total: { type: Number, required: true },
     authorizedBy: { type: String, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      autopopulate: true,
+    },
   },
   { timestamps: true }
 );
@@ -25,5 +32,7 @@ const PettyCashRequest = mongoose.model(
   "PettyCashRequest",
   pettyCashRequestSchema
 );
+
+pettyCashRequestSchema.plugin(mongooseAutoPopulate);
 
 export default PettyCashRequest;

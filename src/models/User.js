@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import mongooseAutoPopulate from "mongoose-autopopulate";
 
 const userSchema = new mongoose.Schema(
   {
@@ -16,5 +17,7 @@ userSchema.pre("save", async function (next) {
 });
 
 const User = mongoose.model("User", userSchema);
+
+userSchema.plugin(mongooseAutoPopulate);
 
 export default User;

@@ -15,6 +15,7 @@ const createRequest = async (req, res) => {
       authorizedBy,
       items,
       total,
+      user: req.user._id,
     });
 
     await newPettyCashRequest.save();
@@ -28,7 +29,9 @@ const createRequest = async (req, res) => {
 
 const getRequests = async (req, res) => {
   try {
-    const pettyCashRequests = await PettyCashRequest.find({});
+    const pettyCashRequests = await PettyCashRequest.find({
+      user: req.user._id,
+    });
     res.send(pettyCashRequests);
   } catch (error) {
     return res.status(400).json({
@@ -41,6 +44,9 @@ const getRequest = async (req, res) => {
   try {
     const pettyCashRequest = await PettyCashRequest.findById(req.params.id);
 
+    if (!pettyCashRequest) {
+      return res.status(404).json({ error: "Request not found" });
+    }
     return res.json({
       data: pettyCashRequest,
     });

@@ -25,7 +25,7 @@ const register = async (req, res) => {
     });
 
     await newUser.save();
-    res.status(201).send({ user: newUser });
+    res.status(201).send({ id: newUser._id, username: newUser.username });
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: "Try again bozo" });
@@ -51,7 +51,7 @@ const login = async (req, res) => {
 
     //Generate JWT Token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
-      expiresIn: "1h",
+      expiresIn: "7d",
     });
 
     res.json({ token });
@@ -63,6 +63,7 @@ const login = async (req, res) => {
 
 const currentUser = (req, res) => {
   res.json(req.user);
+  console.log(res.json(req.user));
 };
 
 export { register, login, currentUser };
