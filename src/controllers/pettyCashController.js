@@ -27,11 +27,22 @@ const createRequest = async (req, res) => {
   }
 };
 
-const getRequests = async (req, res) => {
+const getUserRequests = async (req, res) => {
   try {
     const pettyCashRequests = await PettyCashRequest.find({
       user: req.user._id,
+    }).populate("user");
+    res.send(pettyCashRequests);
+  } catch (error) {
+    return res.status(400).json({
+      message: "Something went wrong.",
     });
+  }
+};
+
+const getRequests = async (req, res) => {
+  try {
+    const pettyCashRequests = await PettyCashRequest.find({}).populate("user");
     res.send(pettyCashRequests);
   } catch (error) {
     return res.status(400).json({
@@ -57,4 +68,4 @@ const getRequest = async (req, res) => {
   }
 };
 
-export { createRequest, getRequests, getRequest };
+export { createRequest, getRequests, getRequest, getUserRequests };
