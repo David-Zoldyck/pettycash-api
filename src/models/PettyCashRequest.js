@@ -24,6 +24,11 @@ const pettyCashRequestSchema = new mongoose.Schema(
       required: true,
       autopopulate: true,
     },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "reject"],
+      default: "pending",
+    },
   },
   { timestamps: true }
 );

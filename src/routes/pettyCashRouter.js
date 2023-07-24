@@ -4,6 +4,8 @@ import {
   getRequests,
   getRequest,
   getUserRequests,
+  approveRequest,
+  rejectRequest,
 } from "#controllers/pettyCashController";
 import checkAuth from "#middleware/checkAuth";
 import checkAdmin from "#middleware/checkAdmin";
@@ -13,5 +15,7 @@ pettyCashRouter.post("/create-request", checkAuth, createRequest);
 pettyCashRouter.get("/get-user-requests", checkAuth, getUserRequests);
 pettyCashRouter.get("/get-requests", checkAdmin, getRequests);
 pettyCashRouter.get("/get-request/:id", getRequest);
+pettyCashRouter.put("/request/:id/approve", checkAdmin, approveRequest);
+pettyCashRouter.put("/request/:id/reject", checkAdmin, rejectRequest);
 
 export default pettyCashRouter;

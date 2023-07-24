@@ -68,4 +68,57 @@ const getRequest = async (req, res) => {
   }
 };
 
-export { createRequest, getRequests, getRequest, getUserRequests };
+const approveRequest = async (req, res) => {
+  try {
+    const pettyCashRequest = await PettyCashRequest.findById(req.params.id);
+
+    if (!pettyCashRequest) {
+      return res.status(404).json({ error: "Request not found" });
+    }
+
+    if (pettyCashRequest.status !== "pending") {
+      return res
+        .status(422)
+        .json({ error: "Request has already been attended to" });
+    }
+
+    await PettyCashRequest.findByIdAndUpdate(pettyCashRequest._id, {
+      status: "approved",
+    });
+    return res.json({ message: "Request approved successfully" });
+  } catch (error) {
+    return res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+const rejectRequest = async (req, res) => {
+  try {
+    const pettyCashRequest = await PettyCashRequest.findById(req.params.id);
+
+    if (!pettyCashRequest) {
+      return res.status(404).json({ error: "Request not found" });
+    }
+
+    if (pettyCashRequest.status !== "pending") {
+      return res
+        .status(400)
+        .json({ error: "Request has already been attended to" });
+    }
+
+    await PettyCashRequest.findByIdAndUpdate(pettyCashRequest._id, {
+      status: "rejected",
+    });
+    return res.json({ message: "Request rejected successfully" });
+  } catch (error) {
+    return res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+export {
+  createRequest,
+  getRequests,
+  getRequest,
+  getUserRequests,
+  approveRequest,
+  rejectRequest,
+};
