@@ -11,7 +11,8 @@
     "#middleware/*": "./src/middleware/*.js",
     "#models/*": "./src/models/*.js",
     "#routes": "./src/routes/index.js",
-    "#routes/*": "./src/routes/*.js"
+    "#routes/*": "./src/routes/*.js",
+    "#mailers/*": "./src/mailers/*.js"
   },
   "scripts": {
     "start": "node src/server",
@@ -21,6 +22,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",

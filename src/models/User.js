@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    email: { type: String, required: true, unique: true },
   },
   { timestamps: true }
 );

@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { register, login, currentUser } from "#controllers/authController";
+import {
+  register,
+  login,
+  currentUser,
+  forgotPassword,
+  resetPassword,
+} from "#controllers/authController";
 import checkAuth from "#middleware/checkAuth";
 
 const authRouter = Router();
@@ -7,5 +13,7 @@ const authRouter = Router();
 authRouter.post("/register", register);
 authRouter.post("/login", login);
 authRouter.get("/user", checkAuth, currentUser);
+authRouter.post("/forgot-password", forgotPassword);
+authRouter.post("/reset-password/:userId/:token", resetPassword);
 
 export default authRouter;
