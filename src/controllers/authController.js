@@ -78,6 +78,7 @@ const currentUser = (req, res) => {
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
+    const code = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
     const user = await User.findOne({ email });
     if (!user)
       return res
@@ -88,46 +89,48 @@ const forgotPassword = async (req, res) => {
     if (!token) {
       token = await new Token({
         user: user._id,
-        token: crypto.randomBytes(32).toString("hex"),
+        token: code.toString(),
       }).save();
     }
 
-    const link = `${process.env.FRONTEND_URL}/reset-password/${user._id}/${token.token}`;
     await sendMail(
       user.email,
       "Password Reset",
-      forgotPasswordMailer(user, link)
+      forgotPasswordMailer(user, token.token)
     );
 
-    res.send({ message: "password reset link sent to your email account" });
+    return res.send({
+      message: "password reset code sent to your email account",
+    });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
 };
 
 const resetPassword = async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const { code, email } = req.body;
+    const user = await User.findOne({ email });
     if (!user)
-      return res.status(400).send({ error: "Invalid link or expired" });
+      return res.status(400).send({ error: "Invalid or expired code" });
 
     const token = await Token.findOne({
       user: user._id,
-      token: req.params.token,
+      token: code,
     });
 
     if (!token)
-      return res.status(400).send({ error: "Invalid link or expired" });
+      return res.status(400).send({ error: "Invalid or expired code" });
 
     user.password = req.body.password;
     await user.save();
     await Token.findByIdAndDelete(token._id);
 
-    res.send({ message: "password reset successfully" });
+    return res.send({ message: "password reset successfully" });
   } catch (e) {
     console.error(e);
-    res.send({ error: "Server error" });
+    return res.send({ error: "Server error" });
   }
 };
 
