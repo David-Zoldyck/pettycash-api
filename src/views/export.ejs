@@ -1,0 +1,39 @@
+<div class="">
+        <div class="">
+            <h1 class="">Requests Report</h1>
+
+            <table class="">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Expense Date</th>
+                        <th>Authorized By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% pettyCashRequests.forEach((request)=> { %>
+                        <tr>
+                            <td>
+                                <%= request.name %>
+                            </td>
+                            <td>
+                                <%= request.total %>
+                            </td>
+                            <td>
+                               <%= request.status %>
+                            </td>
+                            <td>
+                               <%= request.date %>
+                            </td>
+                            <td>
+                               <%= request.authorizedBy %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+

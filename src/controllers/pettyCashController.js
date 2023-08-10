@@ -248,6 +248,17 @@ const getUserStats = async (req, res) => {
   }
 };
 
+const getReport = async (req, res) => {
+  try {
+    const pettyCashRequests = await PettyCashRequest.find();
+    res.render("export", { pettyCashRequests });
+  } catch (error) {
+    console.error("Error fetching petty cash requests:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+
 export {
   createRequest,
   getRequests,
@@ -257,4 +268,5 @@ export {
   rejectRequest,
   getStats,
   getUserStats,
+  getReport,
 };

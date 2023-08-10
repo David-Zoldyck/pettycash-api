@@ -8,9 +8,11 @@ import {
   rejectRequest,
   getStats,
   getUserStats,
+  getReport,
 } from "#controllers/pettyCashController";
 import checkAuth from "#middleware/checkAuth";
 import checkAdmin from "#middleware/checkAdmin";
+import { getReport } from "../controllers/pettyCashController";
 const pettyCashRouter = Router();
 
 pettyCashRouter.post("/create-request", checkAuth, createRequest);
@@ -21,5 +23,6 @@ pettyCashRouter.put("/request/:id/approve", checkAdmin, approveRequest);
 pettyCashRouter.put("/request/:id/reject", checkAdmin, rejectRequest);
 pettyCashRouter.get("/stats", getStats);
 pettyCashRouter.get("/user-stats", checkAuth, getUserStats);
+pettyCashRouter.get("/report", getReport);
 
 export default pettyCashRouter;
