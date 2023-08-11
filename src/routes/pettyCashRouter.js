@@ -12,7 +12,6 @@ import {
 } from "#controllers/pettyCashController";
 import checkAuth from "#middleware/checkAuth";
 import checkAdmin from "#middleware/checkAdmin";
-import { getReport } from "../controllers/pettyCashController";
 const pettyCashRouter = Router();
 
 pettyCashRouter.post("/create-request", checkAuth, createRequest);
