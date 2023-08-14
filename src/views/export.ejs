@@ -17,49 +17,51 @@
     
     <body>
     
-        <div class="jumbotron text-center bg-light">
-            <div class="container">
-                <h1 class="display-6">Requests Report</h1>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Form Name</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                            <th>Expense Date</th>
-                            <th>Authorized By</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% pettyCashRequests.forEach((request)=> { %>
-                            <tr>
-                                <td>
-                                    <%= request.name %>
-                                </td>
-                                <td>
-                                    <%= request.total %>
-                                </td>
-                                <td>
-                                    <%= request.status %>
-                                </td>
-                                <td>
-                                    <%= request.date %>
-                                </td>
-                                <td>
-                                    <%= request.authorizedBy %>
-                                </td>
-                            </tr>
-                            <% }) %>
-                    </tbody>
-                </table>
-            </div>
+        <div class="container">
+                    <div class="jumbotron text-center bg-light">
+
+                            <h1 class="display-6">Requests Report</h1>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Form Name</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Expense Date</th>
+                                        <th>Authorized By</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% pettyCashRequests.forEach((request)=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= request.name %>
+                                            </td>
+                                            <td>
+                                                <%= request.total %>
+                                            </td>
+                                            <td>
+                                                <%= request.status %>
+                                            </td>
+                                            <td>
+                                                <%= request.date %>
+                                            </td>
+                                            <td>
+                                                <%= request.authorizedBy %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <button onclick="window.print()" class="btn btn-primary">Print</button>
+                        </div>
+                    </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <button onclick="window.print()" class="btn btn-primary">print</button>
-            </div>
-        </div>
-        <footer class="bg-light text-center py-3">© Cyberbyte Software <%= 2023 %>
+        <footer class="container bg-light text-center py-3">© Cyberbyte Software <%= 2023 %>
         </footer>
     </body>
     
