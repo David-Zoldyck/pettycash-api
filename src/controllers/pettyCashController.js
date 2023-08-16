@@ -253,11 +253,22 @@ const getReport = async (req, res) => {
     const pettyCashRequests = await PettyCashRequest.find();
     res.render("export", { pettyCashRequests });
   } catch (error) {
-    console.error("Error fetching petty cash requests:", error);
+    console.error("error:", error);
     res.status(500).send("Internal Server Error");
   }
 };
 
+const getUserReport = async (req, res) => {
+  try {
+    const pettyCashRequests = await PettyCashRequest.find({
+      user: req.user._id,
+    });
+    res.render("export", { pettyCashRequests });
+  } catch (error) {
+    console.error("error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 
 export {
   createRequest,
@@ -269,4 +280,5 @@ export {
   getStats,
   getUserStats,
   getReport,
+  getUserReport,
 };
