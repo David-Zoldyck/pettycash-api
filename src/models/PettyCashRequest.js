@@ -29,6 +29,7 @@ const pettyCashRequestSchema = new mongoose.Schema(
       enum: ["pending", "approved", "reject"],
       default: "pending",
     },
+    imageUrl: { type: String },
   },
   { timestamps: true }
 );

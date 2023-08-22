@@ -1,9 +1,12 @@
 import PettyCashRequest from "#models/PettyCashRequest";
+import handleUpload from "#utils/upload";
 
 const createRequest = async (req, res) => {
   const { name, date, accountDetails, authorizedBy, items, total } = req.body;
 
   try {
+    const cldRes = req.file ? await handleUpload(req) : {};
+
     const newPettyCashRequest = new PettyCashRequest({
       name,
       date,
@@ -16,10 +19,10 @@ const createRequest = async (req, res) => {
       items,
       total,
       user: req.user._id,
+      imageUrl: cldRes.secure_url,
     });
 
     await newPettyCashRequest.save();
-
     res.status(201).send({ newPettyCashRequest });
   } catch (error) {
     console.error(error);

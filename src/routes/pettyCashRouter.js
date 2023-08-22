@@ -13,11 +13,16 @@ import {
 } from "#controllers/pettyCashController";
 import checkAuth from "#middleware/checkAuth";
 import { checkAdmin, checkUser } from "#middleware/checkRole";
+import uploader from "#middleware/multer";
 
 const pettyCashRouter = Router();
 pettyCashRouter.use(checkAuth);
 
-pettyCashRouter.post("/create-request", createRequest);
+pettyCashRouter.post(
+  "/create-request",
+  uploader.single("attachment"),
+  createRequest
+);
 pettyCashRouter.get("/get-user-requests", getUserRequests);
 pettyCashRouter.get("/get-requests", checkAdmin, getRequests);
 pettyCashRouter.get("/get-request/:id", getRequest);
