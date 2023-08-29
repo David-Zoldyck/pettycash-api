@@ -51,7 +51,7 @@ const getUserRequests = async (req, res) => {
      * @type {String|undefined}
      */
     const { q } = req.query;
-    const formsPerPage = 6;
+    const formsPerPage = 15;
     const query = !q?.length
       ? {}
       : {
@@ -99,7 +99,7 @@ const getRequests = async (req, res) => {
      */
     const { q } = req.query;
     console.log(q);
-    const formsPerPage = 6;
+    const formsPerPage = 15;
 
     const totalCount = await PettyCashRequest.countDocuments({});
 

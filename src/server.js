@@ -14,6 +14,7 @@ const port = process.env.PORT;
 
 app.use(compression());
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Setting the view engine

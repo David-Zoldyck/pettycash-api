@@ -71,8 +71,8 @@ const login = async (req, res) => {
 };
 
 const currentUser = (req, res) => {
+  console.log(req.user);
   res.json(req.user);
-  console.log(res.json(req.user));
 };
 
 const forgotPassword = async (req, res) => {
