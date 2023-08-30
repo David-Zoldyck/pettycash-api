@@ -13,8 +13,8 @@ const pettyCashRequestSchema = new mongoose.Schema(
     items: [
       {
         name: { type: String, required: true },
-        price: {type: String, required: true},
-        quantity: {type: String, required: true},
+        price: { type: String, required: true },
+        quantity: { type: String, required: true },
         amount: { type: Number, required: true },
       },
     ],
@@ -32,6 +32,7 @@ const pettyCashRequestSchema = new mongoose.Schema(
       default: "pending",
     },
     imageUrl: { type: String },
+    rejectReason: String,
   },
   { timestamps: true }
 );

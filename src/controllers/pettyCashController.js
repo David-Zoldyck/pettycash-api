@@ -99,7 +99,7 @@ const getRequests = async (req, res) => {
      */
     const { q } = req.query;
     console.log(q);
-    const formsPerPage = 15;
+    const formsPerPage = 16;
 
     const totalCount = await PettyCashRequest.countDocuments({});
 
@@ -178,7 +178,7 @@ const approveRequest = async (req, res) => {
 const rejectRequest = async (req, res) => {
   try {
     const pettyCashRequest = await PettyCashRequest.findById(req.params.id);
-
+    const { rejectReason } = req.body;
     if (!pettyCashRequest) {
       return res.status(404).json({ error: "Request not found" });
     }
@@ -191,6 +191,7 @@ const rejectRequest = async (req, res) => {
 
     await PettyCashRequest.findByIdAndUpdate(pettyCashRequest._id, {
       status: "rejected",
+      rejectReason,
     });
     return res.json({ message: "Request rejected successfully" });
   } catch (error) {
