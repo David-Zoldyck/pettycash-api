@@ -254,7 +254,19 @@ const getUserStats = async (req, res) => {
 
 const getReport = async (req, res) => {
   try {
-    const pettyCashRequests = await PettyCashRequest.find();
+    const pettyCashRequests = await PettyCashRequest.find({
+      status: req.params.status,
+    });
+    res.render("export", { pettyCashRequests });
+  } catch (error) {
+    console.error("error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+const getAllReport = async (req, res) => {
+  try {
+    const pettyCashRequests = await PettyCashRequest.find({});
     res.render("export", { pettyCashRequests });
   } catch (error) {
     console.error("error:", error);
@@ -266,6 +278,7 @@ const getUserReport = async (req, res) => {
   try {
     const pettyCashRequests = await PettyCashRequest.find({
       user: req.user._id,
+      status: req.params.status,
     });
     res.render("export", { pettyCashRequests });
   } catch (error) {
@@ -273,6 +286,18 @@ const getUserReport = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+const getAllUserReport = async (req, res) => {
+  try {
+    const pettyCashRequests = await PettyCashRequest.find({
+      user: req.user._id,
+    });
+    res.render("export", { pettyCashRequests });
+  } catch (error) {
+    console.error("error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 
 export {
   createRequest,
@@ -284,5 +309,7 @@ export {
   getStats,
   getUserStats,
   getReport,
+  getAllReport,
   getUserReport,
+  getAllUserReport,
 };
