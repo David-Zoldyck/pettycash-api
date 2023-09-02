@@ -8,6 +8,8 @@ import {
   rejectRequest,
   getStats,
   getUserStats,
+  getPendingRequests,
+  getPendingRequestsUser,
   getReport,
   getAllReport,
   getUserReport,
@@ -27,6 +29,8 @@ pettyCashRouter.post(
 );
 pettyCashRouter.get("/get-user-requests", getUserRequests);
 pettyCashRouter.get("/get-requests", checkAdmin, getRequests);
+pettyCashRouter.get("/get-pending-requests-user", getPendingRequestsUser);
+pettyCashRouter.get("/get-pending-requests", checkAdmin, getPendingRequests);
 pettyCashRouter.get("/get-request/:id", getRequest);
 pettyCashRouter.put("/request/:id/approve", checkAdmin, approveRequest);
 pettyCashRouter.put("/request/:id/reject", checkAdmin, rejectRequest);

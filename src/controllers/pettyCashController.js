@@ -135,6 +135,37 @@ const getRequests = async (req, res) => {
   }
 };
 
+const getPendingRequests = async (req, res) => {
+  try {
+    const pettyCashRequests = await PettyCashRequest.find({
+      status: "pending",
+    })
+      .populate("user")
+      .sort({ createdAt: -1 });
+
+    res.send({ forms: pettyCashRequests });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: "Something went wrong" });
+  }
+};
+
+const getPendingRequestsUser = async (req, res) => {
+  try {
+    const pettyCashRequests = await PettyCashRequest.find({
+      user: req.user._id,
+      status: "pending",
+    })
+      .populate("user")
+      .sort({ createdAt: -1 });
+
+    res.send({ forms: pettyCashRequests });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: "Something went wrong" });
+  }
+};
+
 const getRequest = async (req, res) => {
   try {
     const pettyCashRequest = await PettyCashRequest.findById(req.params.id);
@@ -286,6 +317,7 @@ const getUserReport = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
 const getAllUserReport = async (req, res) => {
   try {
     const pettyCashRequests = await PettyCashRequest.find({
@@ -298,12 +330,13 @@ const getAllUserReport = async (req, res) => {
   }
 };
 
-
 export {
   createRequest,
   getRequests,
   getRequest,
   getUserRequests,
+  getPendingRequests,
+  getPendingRequestsUser,
   approveRequest,
   rejectRequest,
   getStats,
