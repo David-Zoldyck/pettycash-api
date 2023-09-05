@@ -24,5 +24,6 @@ export const checkRole =
 
 export const checkAdmin = checkRole("admin");
 export const checkUser = checkRole("user");
+export const checkSuperAdmin = checkRole("superadmin");
 
 export default checkRole;

@@ -51,7 +51,7 @@ const getUserRequests = async (req, res) => {
      * @type {String|undefined}
      */
     const { q } = req.query;
-    const formsPerPage = 15;
+    const formsPerPage = 20;
     const query = !q?.length
       ? {}
       : {
@@ -166,6 +166,23 @@ const getPendingRequestsUser = async (req, res) => {
   }
 };
 
+const getApprovedRequests = async (req, res) => {
+  try {
+    const pettyCashRequests = await PettyCashRequest.find({
+      status: "approved",
+    })
+      .populate("user")
+      .sort({ createdAt: -1 });
+
+    res.send({ forms: pettyCashRequests });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: "Something went wrong" });
+  }
+};
+
+
+
 const getRequest = async (req, res) => {
   try {
     const pettyCashRequest = await PettyCashRequest.findById(req.params.id);
@@ -206,6 +223,30 @@ const approveRequest = async (req, res) => {
   }
 };
 
+
+const approveRequestFinal = async (req, res) => {
+  try {
+    const pettyCashRequest = await PettyCashRequest.findById(req.params.id);
+
+    if (!pettyCashRequest) {
+      return res.status(404).json({ error: "Request not found" });
+    }
+
+    if (pettyCashRequest.superadminstatus !== "pending") {
+      return res
+        .status(422)
+        .json({ error: "Request has already been attended to" });
+    }
+
+    await PettyCashRequest.findByIdAndUpdate(pettyCashRequest._id, {
+      superadminstatus: "approved",
+    });
+    return res.json({ message: "Request approved successfully" });
+  } catch (error) {
+    return res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
 const rejectRequest = async (req, res) => {
   try {
     const pettyCashRequest = await PettyCashRequest.findById(req.params.id);
@@ -223,6 +264,31 @@ const rejectRequest = async (req, res) => {
     await PettyCashRequest.findByIdAndUpdate(pettyCashRequest._id, {
       status: "rejected",
       rejectReason,
+    });
+    return res.json({ message: "Request rejected successfully" });
+  } catch (error) {
+    return res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+
+const rejectRequestFinal = async (req, res) => {
+  try {
+    const pettyCashRequest = await PettyCashRequest.findById(req.params.id);
+    const { rejectReasonFinal } = req.body;
+    if (!pettyCashRequest) {
+      return res.status(404).json({ error: "Request not found" });
+    }
+
+    if (pettyCashRequest.superadminstatus !== "pending") {
+      return res
+        .status(400)
+        .json({ error: "Request has already been attended to" });
+    }
+
+    await PettyCashRequest.findByIdAndUpdate(pettyCashRequest._id, {
+      superadminstatus: "rejected",
+      rejectReasonFinal,
     });
     return res.json({ message: "Request rejected successfully" });
   } catch (error) {
@@ -337,8 +403,11 @@ export {
   getUserRequests,
   getPendingRequests,
   getPendingRequestsUser,
+  getApprovedRequests,
   approveRequest,
+  approveRequestFinal,
   rejectRequest,
+  rejectRequestFinal,
   getStats,
   getUserStats,
   getReport,

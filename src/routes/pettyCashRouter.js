@@ -5,18 +5,21 @@ import {
   getRequest,
   getUserRequests,
   approveRequest,
+  approveRequestFinal,
   rejectRequest,
+  rejectRequestFinal,
   getStats,
   getUserStats,
   getPendingRequests,
   getPendingRequestsUser,
+  getApprovedRequests,
   getReport,
   getAllReport,
   getUserReport,
   getAllUserReport,
 } from "#controllers/pettyCashController";
 import checkAuth from "#middleware/checkAuth";
-import { checkAdmin, checkUser } from "#middleware/checkRole";
+import { checkAdmin, checkUser, checkSuperAdmin } from "#middleware/checkRole";
 import uploader from "#middleware/multer";
 
 const pettyCashRouter = Router();
@@ -31,9 +34,12 @@ pettyCashRouter.get("/get-user-requests", getUserRequests);
 pettyCashRouter.get("/get-requests", checkAdmin, getRequests);
 pettyCashRouter.get("/get-pending-requests-user", getPendingRequestsUser);
 pettyCashRouter.get("/get-pending-requests", checkAdmin, getPendingRequests);
+pettyCashRouter.get("/get-approved-requests", getApprovedRequests);
 pettyCashRouter.get("/get-request/:id", getRequest);
 pettyCashRouter.put("/request/:id/approve", checkAdmin, approveRequest);
 pettyCashRouter.put("/request/:id/reject", checkAdmin, rejectRequest);
+pettyCashRouter.put("/request/:id/approve-final", checkSuperAdmin, approveRequestFinal);
+pettyCashRouter.put("/request/:id/reject-final", checkSuperAdmin, rejectRequestFinal);
 pettyCashRouter.get("/stats", getStats);
 pettyCashRouter.get("/user-stats", getUserStats);
 pettyCashRouter.get("/report/:status", getReport);
