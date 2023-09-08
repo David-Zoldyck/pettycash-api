@@ -1,13 +1,15 @@
 import sgMail from "@sendgrid/mail";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const sendMail = async (to, subject, body) => {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   const msg = {
     to,
-    from: "ose.ughu@outlook.com", // Use the email address or domain you verified above
+    from: process.env.MAILER_FROM, // Use the email address or domain you verified above
     subject,
-    // text: "and easy to do anywhere, even with Node.js",
     html: body,
   };
 

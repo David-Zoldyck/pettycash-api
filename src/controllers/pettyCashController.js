@@ -1,11 +1,23 @@
 import PettyCashRequest from "#models/PettyCashRequest";
+import User from "#models/User";
+import Authorizer from "#models/Authorizer";
 import handleUpload from "#utils/upload";
+import authorizerMailer from "#mailers/authorizerMailer";
+import sendMail from "#mailers/mailer";
 
 const createRequest = async (req, res) => {
   const { name, date, accountDetails, authorizedBy, items, total } = req.body;
 
   try {
     const cldRes = req.file ? await handleUpload(req) : {};
+
+    const submittedUser = await User.findById(req.user._id);
+
+    const authorizer = await Authorizer.findById(authorizedBy);
+
+    if (!authorizer) {
+      return res.status(404).json({ error: "AUthorizer not found" });
+    }
 
     const newPettyCashRequest = new PettyCashRequest({
       name,
@@ -23,25 +35,19 @@ const createRequest = async (req, res) => {
     });
 
     await newPettyCashRequest.save();
+
+    await sendMail(
+      authorizer.email,
+      "Authorizer Selection",
+      authorizerMailer(submittedUser.username, authorizer.name)
+    );
+
     res.status(201).send({ newPettyCashRequest });
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: "Try again bozo" });
   }
 };
-
-// const getUserRequests = async (req, res) => {
-//   try {
-//     const pettyCashRequests = await PettyCashRequest.find({
-//       user: req.user._id,
-//     }).populate("user");
-//     res.send(pettyCashRequests);
-//   } catch (error) {
-//     return res.status(400).json({
-//       message: "Something went wrong.",
-//     });
-//   }
-// };
 
 const getUserRequests = async (req, res) => {
   try {
@@ -89,6 +95,7 @@ const getUserRequests = async (req, res) => {
     });
   }
 };
+
 
 const getRequests = async (req, res) => {
   try {
@@ -150,6 +157,22 @@ const getPendingRequests = async (req, res) => {
   }
 };
 
+const getPendingRequestsSuperAdmin = async (req, res) => {
+  try {
+    const pettyCashRequests = await PettyCashRequest.find({
+      status: "approved",
+      superadminstatus: "pending",
+    })
+      .populate("user")
+      .sort({ createdAt: -1 });
+
+    res.send({ forms: pettyCashRequests });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: "Something went wrong" });
+  }
+};
+
 const getPendingRequestsUser = async (req, res) => {
   try {
     const pettyCashRequests = await PettyCashRequest.find({
@@ -181,7 +204,53 @@ const getApprovedRequests = async (req, res) => {
   }
 };
 
+const getSuperAdminRequests = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
 
+    /**
+     * @type {String|undefined}
+     */
+    const { q } = req.query;
+    console.log(q);
+    const formsPerPage = 16;
+
+    const totalCount = await PettyCashRequest.countDocuments({});
+
+    const totalPages = Math.ceil(totalCount / formsPerPage);
+
+    const skipForms = (page - 1) * formsPerPage;
+    const query = !q?.length
+      ? {}
+      : {
+          $or: [
+            // { _id: q },
+            { username: new RegExp(q, "i") },
+            { name: new RegExp(q, "i") },
+          ],
+        };
+    console.log(query);
+    const pettyCashRequests = await PettyCashRequest.find({
+      status: "approved",
+      ...query,
+    })
+      .populate("user")
+      .sort({ createdAt: -1 })
+      .skip(skipForms)
+      .limit(formsPerPage);
+
+    res.send({
+      totalPages,
+      currentPage: page,
+      forms: pettyCashRequests,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: "Something went wrong.",
+    });
+  }
+};
 
 const getRequest = async (req, res) => {
   try {
@@ -222,7 +291,6 @@ const approveRequest = async (req, res) => {
     return res.status(500).json({ error: "Something went wrong" });
   }
 };
-
 
 const approveRequestFinal = async (req, res) => {
   try {
@@ -270,7 +338,6 @@ const rejectRequest = async (req, res) => {
     return res.status(500).json({ error: "Something went wrong" });
   }
 };
-
 
 const rejectRequestFinal = async (req, res) => {
   try {
@@ -396,13 +463,26 @@ const getAllUserReport = async (req, res) => {
   }
 };
 
+const getAuthorizers = async (req, res) => {
+  try {
+    const authorizers = await Authorizer.find({});
+
+    res.send({ authorizers });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
 export {
   createRequest,
   getRequests,
   getRequest,
   getUserRequests,
+  getSuperAdminRequests,
   getPendingRequests,
   getPendingRequestsUser,
+  getPendingRequestsSuperAdmin,
   getApprovedRequests,
   approveRequest,
   approveRequestFinal,
@@ -414,4 +494,5 @@ export {
   getAllReport,
   getUserReport,
   getAllUserReport,
+  getAuthorizers,
 };

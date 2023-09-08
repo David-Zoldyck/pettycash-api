@@ -19,7 +19,12 @@ const pettyCashRequestSchema = new mongoose.Schema(
       },
     ],
     total: { type: Number, required: true },
-    authorizedBy: { type: String, required: true },
+    authorizedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Authorizer",
+      required: true,
+      autopopulate: true,
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

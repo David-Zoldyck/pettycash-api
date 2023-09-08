@@ -8,6 +8,7 @@
     "#src/*": "./src/*.js",
     "#utils/*": "./src/utils/*.js",
     "#controllers/*": "./src/controllers/*.js",
+    "#database/*": "./src/database/*.js",
     "#middleware/*": "./src/middleware/*.js",
     "#models/*": "./src/models/*.js",
     "#routes": "./src/routes/index.js",
@@ -15,8 +16,9 @@
     "#mailers/*": "./src/mailers/*.js"
   },
   "scripts": {
-    "start": "node src/server",
-    "dev": "nodemon src/server"
+    "start": "npm run seed-authorizer && node src/server",
+    "dev": "nodemon src/server",
+    "seed-authorizers": "node src/database/seeds/authorizers/seed"
   },
   "keywords": [],
   "author": "",
