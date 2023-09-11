@@ -16,7 +16,7 @@
     "#mailers/*": "./src/mailers/*.js"
   },
   "scripts": {
-    "start": "npm run seed-authorizer && node src/server",
+    "start": "npm run seed-authorizers && node src/server",
     "dev": "nodemon src/server",
     "seed-authorizers": "node src/database/seeds/authorizers/seed"
   },
