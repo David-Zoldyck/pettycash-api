@@ -16,9 +16,9 @@
     "#mailers/*": "./src/mailers/*.js"
   },
   "scripts": {
-    "start": "npm run seed-authorizers && node src/server",
+    "start": "node src/server",
     "dev": "nodemon src/server",
-    "seed-authorizers": "node src/database/seeds/authorizers/seed"
+    "seed": "node src/database/seed"
   },
   "keywords": [],
   "author": "",

@@ -1,12 +1,10 @@
 import mongoose from "mongoose";
 import Authorizer from "#models/Authorizer";
-import seedData from "./seedData.js";
-import dotenv from "dotenv";
+import seedData from "./seeds/authorizers/seedData.js";
 
-dotenv.config();
-await mongoose.connect(process.env.DB_URI);
+// await mongoose.connect(process.env.DB_URI);
 
-async function seedDatabase() {
+export default async function seedDatabase() {
   try {
     await Authorizer.deleteMany();
 
@@ -15,9 +13,5 @@ async function seedDatabase() {
     console.log("Database seeded successfully");
   } catch (error) {
     console.error("Err:", error);
-  } finally {
-    await mongoose.connection.close();
   }
 }
-
-await seedDatabase();
