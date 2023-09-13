@@ -96,7 +96,6 @@ const getUserRequests = async (req, res) => {
   }
 };
 
-
 const getRequests = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -105,7 +104,6 @@ const getRequests = async (req, res) => {
      * @type {String|undefined}
      */
     const { q } = req.query;
-    console.log(q);
     const formsPerPage = 16;
 
     const totalCount = await PettyCashRequest.countDocuments({});
@@ -122,7 +120,6 @@ const getRequests = async (req, res) => {
             { name: new RegExp(q, "i") },
           ],
         };
-    console.log(query);
     const pettyCashRequests = await PettyCashRequest.find(query)
       .populate("user")
       .sort({ createdAt: -1 })
@@ -212,7 +209,6 @@ const getSuperAdminRequests = async (req, res) => {
      * @type {String|undefined}
      */
     const { q } = req.query;
-    console.log(q);
     const formsPerPage = 16;
 
     const totalCount = await PettyCashRequest.countDocuments({});
@@ -229,7 +225,6 @@ const getSuperAdminRequests = async (req, res) => {
             { name: new RegExp(q, "i") },
           ],
         };
-    console.log(query);
     const pettyCashRequests = await PettyCashRequest.find({
       status: "approved",
       ...query,

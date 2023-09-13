@@ -41,6 +41,7 @@
     "streamifier": "^0.1.1"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.4.9",
     "nodemon": "^2.0.22"
   }
 }
